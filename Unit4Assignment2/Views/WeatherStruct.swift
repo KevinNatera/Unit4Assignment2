@@ -10,7 +10,7 @@ import Foundation
 
 struct WeatherResults : Codable {
     let daily: WeatherWrapper
-    let timeZone: String
+    let timeZone: String?
 }
 
 struct WeatherWrapper : Codable {

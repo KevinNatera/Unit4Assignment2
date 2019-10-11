@@ -15,9 +15,9 @@ class WeatherAPIHelper {
     
     static let shared = WeatherAPIHelper()
 
-    func getWeather(zipCode: Int, completionHandler: @escaping (Result<[Weather],AppError>) -> () ) {
+    func getWeather(latitude: Double, longitude: Double, completionHandler: @escaping (Result<[Weather],AppError>) -> () ) {
         
-    let urlStr = "https://api.darksky.net/forecast/\(Secrets.apiKey)/42.3601,-71.0589"
+    let urlStr = "https://api.darksky.net/forecast/\(Secrets.apiKey)/\(latitude),\(longitude)"
     guard let url = URL(string: urlStr) else {
         completionHandler(.failure(.badURL))
         return
@@ -29,8 +29,8 @@ class WeatherAPIHelper {
             print(error)
         case .success(let data):
             do {
-                let weatherInfo = try JSONDecoder().decode(WeatherWrapper.self, from: data)
-                completionHandler(.success(weatherInfo.data))
+                let weatherInfo = try JSONDecoder().decode(WeatherResults.self, from: data)
+                completionHandler(.success(weatherInfo.daily.data))
             } catch {
                 completionHandler(.failure(.couldNotParseJSON(rawError: error)))
             }
