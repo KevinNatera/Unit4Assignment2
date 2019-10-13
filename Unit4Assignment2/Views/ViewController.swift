@@ -17,8 +17,25 @@ class ViewController: UIViewController {
     var weatherData = [Weather]() {
         didSet {
             weatherCollectionOutlet.reloadData()
+            for i in weatherData {
+                print(i.date)
+            }
         }
     }
+    
+    var cityName = String() {
+        didSet {
+            cityLabel.text = "Weather Forecast for \(cityName.capitalized)"
+        }
+    }
+    
+    //partly-cloudy-day and night
+    //cloudy
+    //rain
+    //fog
+    //clear-day
+    //clear-night
+    //snow
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,39 +63,38 @@ class ViewController: UIViewController {
                 switch result {
                 case let .failure(error):
                     print(error)
-                case let .success((lat, long)):
+                case let .success((lat, long, name)):
                     UserDefaults.standard.set(lat, forKey: "latitude")
                     UserDefaults.standard.set(long, forKey: "longitude")
-                    WeatherAPIHelper.shared.getWeather(latitude: lat, longitude: long) { (result) in
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .failure(let error):
-                                print(error)
-                            case .success(let weatherDataFromOnline):
-                                self.weatherData = weatherDataFromOnline
-                            }
-                        }
-                    }
+                    UserDefaults.standard.set(name, forKey: "name")
+                    self.cityName = name
+                    self.getData(latitude: lat, longitude: long)
                 }
             }
         }
     }
     
     private func loadDefaults() {
-        if let latitude = UserDefaults.standard.value(forKey: "latitude") as? Double, let longitude = UserDefaults.standard.value(forKey: "longitude") as? Double {
-            WeatherAPIHelper.shared.getWeather(latitude: latitude, longitude: longitude) { (result) in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .failure(let error):
-                        print(error)
-                    case .success(let weatherDataFromOnline):
-                        self.weatherData = weatherDataFromOnline
-                    }
-                }
-            }
+        if let latitude = UserDefaults.standard.value(forKey: "latitude") as? Double, let longitude = UserDefaults.standard.value(forKey: "longitude") as? Double, let name = UserDefaults.standard.value(forKey: "name") as? String {
+            cityName = name
+            getData(latitude: latitude, longitude: longitude)
         }
     }
+    
+    private func getData(latitude: Double, longitude: Double) {
+        WeatherAPIHelper.shared.getWeather(latitude: latitude, longitude: longitude) { (result) in
+                      DispatchQueue.main.async {
+                          switch result {
+                          case .failure(let error):
+                              print(error)
+                          case .success(let weatherDataFromOnline):
+                              self.weatherData = weatherDataFromOnline
+                          }
+                      }
+                  }
+              }
 }
+
 
 // MARK: - CollectionView and Textfield Methods
 
@@ -107,10 +123,14 @@ extension ViewController : UITextFieldDelegate {
         if textField.text?.count == 5 {
             textField.resignFirstResponder()
             loadData(zipCode: textField.text!)
-            weatherCollectionOutlet.reloadData()
         }
-         
-        weatherCollectionOutlet.reloadData()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text?.count == 5 {
+            textField.text = ""
+        }
     }
 }
 
+//insert at in the persistence helper for the favorites order

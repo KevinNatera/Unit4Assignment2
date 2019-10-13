@@ -10,7 +10,6 @@ import Foundation
 
 struct WeatherResults : Codable {
     let daily: WeatherWrapper
-    let timeZone: String?
 }
 
 struct WeatherWrapper : Codable {
@@ -19,6 +18,7 @@ struct WeatherWrapper : Codable {
 
 struct Weather : Codable {
     let icon: String
+    let summary: String
     let time: Int
     let sunriseTime: Int
     let sunsetTime: Int
@@ -26,6 +26,14 @@ struct Weather : Codable {
     let temperatureLow: Double
     let windSpeed: Double
     let precipProbability: Double
+    var date : String {
+        get {
+            let date = NSDate(timeIntervalSince1970: TimeInterval(time)) as Date
+            let df = DateFormatter()
+            df.dateFormat = "MMM-dd-yyy"
+            return df.string(from:date)
+        }
+    }
 }
 
 
