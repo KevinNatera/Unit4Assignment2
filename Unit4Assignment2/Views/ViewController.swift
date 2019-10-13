@@ -17,9 +17,6 @@ class ViewController: UIViewController {
     var weatherData = [Weather]() {
         didSet {
             weatherCollectionOutlet.reloadData()
-            for i in weatherData {
-                print(i.date)
-            }
         }
     }
     

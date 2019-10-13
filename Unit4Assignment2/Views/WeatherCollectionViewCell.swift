@@ -20,5 +20,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         highLabel.text = "High: \(weather.temperatureHigh)"
         lowLabel.text = "Low: \(weather.temperatureLow)"
         dateLabel.text = weather.date
+        imageOutlet.image = UIImage(named: weather.icon )
     }
 }
