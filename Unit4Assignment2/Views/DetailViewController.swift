@@ -55,6 +55,12 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var precipitationLabel: UILabel!
     @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
     
+    @IBAction func favoriteButtonPressed(_ sender: UIButton) {
+        let favoritedPhoto = FavoritePhoto(date: Date(), cityName: cityName, imageURL: randomPhoto)
+        DispatchQueue.global(qos: .utility).async {
+            try? PhotoPersistenceHelper.manager.save(newPhoto: favoritedPhoto)
+        }
+    }
     
     
     override func viewDidLoad() {

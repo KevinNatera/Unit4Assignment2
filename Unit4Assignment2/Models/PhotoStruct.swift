@@ -16,3 +16,9 @@ struct Photo: Codable {
     let id: Int
     let largeImageURL: String
 }
+
+struct FavoritePhoto: Codable {
+    let date: Date
+    let cityName: String
+    let imageURL: String
+}
