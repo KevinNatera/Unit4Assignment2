@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var zipCodeTextFieldOutlet: UITextField!
     @IBOutlet weak var cityLabel: UILabel!
     
+// MARK: - Variables
+    
     var weatherData = [Weather]() {
         didSet {
             weatherCollectionOutlet.reloadData()
@@ -23,16 +25,9 @@ class ViewController: UIViewController {
     var cityName = String() {
         didSet {
             cityLabel.text = "Weather Forecast for \(cityName.capitalized)"
+            
         }
     }
-    
-    //partly-cloudy-day and night
-    //cloudy
-    //rain
-    //fog
-    //clear-day
-    //clear-night
-    //snow
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +35,18 @@ class ViewController: UIViewController {
        loadDefaults()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+         if let cell = sender as? WeatherCollectionViewCell, let indexPath = self.weatherCollectionOutlet.indexPath(for: cell) {
+            let detailVC = segue.destination as! DetailViewController
+            detailVC.cityName = cityName
+            detailVC.weatherInfo = weatherData[indexPath.row]
+            
+        }
+    }
    
     
-// MARK: - Private methods
+// MARK: - Private Methods
     
     private func setUp() {
         let layout = weatherCollectionOutlet.collectionViewLayout as! UICollectionViewFlowLayout
@@ -93,7 +97,7 @@ class ViewController: UIViewController {
 }
 
 
-// MARK: - CollectionView and Textfield Methods
+// MARK: - CollectionView Methods
 
 extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -113,6 +117,8 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
     }
 
 }
+
+// MARK: - Textfield Methods
 
 extension ViewController : UITextFieldDelegate {
     
