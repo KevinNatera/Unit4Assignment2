@@ -19,7 +19,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     func configureCell(weather: Weather ) {
         highLabel.text = "High: \(weather.temperatureHigh)"
         lowLabel.text = "Low: \(weather.temperatureLow)"
-        dateLabel.text = weather.date
+        dateLabel.text = weather.date.replacingOccurrences(of: "-", with: " ")
         imageOutlet.image = UIImage(named: weather.icon )
     }
 }

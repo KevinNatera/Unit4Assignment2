@@ -1,23 +1,22 @@
 //
-//  WeatherAPIHelper.swift
+//  PhotoAPIHelper.swift
 //  Unit4Assignment2
 //
-//  Created by Kevin Natera on 10/9/19.
+//  Created by Kevin Natera on 10/13/19.
 //  Copyright © 2019 Kevin Natera. All rights reserved.
 //
 
 import Foundation
 
-
-class WeatherAPIHelper {
-    
+class PhotoAPIHelper {
     private init() {}
     
-    static let shared = WeatherAPIHelper()
+    static let shared = PhotoAPIHelper()
 
-    func getWeather(latitude: Double, longitude: Double, completionHandler: @escaping (Result<[Weather],AppError>) -> () ) {
-        
-        let urlStr = "https://api.darksky.net/forecast/\(Secrets.weatherAPIKey)/\(latitude),\(longitude)"
+    func getPhoto(cityName: String, completionHandler: @escaping (Result<[Photo],AppError>) -> () ) {
+        print(cityName)
+        let name = cityName.lowercased().replacingOccurrences(of: " ", with: "+")
+    let urlStr = "https://pixabay.com/api/?key=\(Secrets.picAPIKey)&q=\(name)&image_type=photo"
     guard let url = URL(string: urlStr) else {
         completionHandler(.failure(.badURL))
         return
@@ -29,8 +28,8 @@ class WeatherAPIHelper {
             print(error)
         case .success(let data):
             do {
-                let weatherInfo = try JSONDecoder().decode(WeatherResults.self, from: data)
-                completionHandler(.success(weatherInfo.daily.data))
+                let photoInfo = try JSONDecoder().decode(PhotoWrapper.self, from: data)
+                completionHandler(.success(photoInfo.hits))
             } catch {
                 completionHandler(.failure(.couldNotParseJSON(rawError: error)))
             }
