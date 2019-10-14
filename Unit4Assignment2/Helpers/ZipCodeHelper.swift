@@ -19,29 +19,6 @@ class ZipCodeHelper {
     
     private init() {}
     
-//    static func getLatLong(fromZipCode zipCode: String, completionHandler: @escaping (Result<(lat: Double, long: Double), Error>) -> Void) {
-//
-//        let geocoder = CLGeocoder()
-//
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            geocoder.geocodeAddressString(zipCode){(placemarks, error) -> Void in
-//                DispatchQueue.main.async {
-//                    if let placemark = placemarks?.first, let coordinate = placemark.location?.coordinate {
-//                        completionHandler(.success((coordinate.latitude, coordinate.longitude)))
-//                    } else {
-//                        let locationError: LocationFetchingError
-//                        if let error = error {
-//                            locationError = .error(error)
-//                        } else {
-//                            locationError = .noErrorMessage
-//                        }
-//                        completionHandler(.failure(locationError))
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
     static func getLatLong(fromZipCode zipCode: String, completionHandler: @escaping (Result<(lat: Double, long: Double,name: String), LocationFetchingError>) -> Void) {
         let geocoder = CLGeocoder()
         DispatchQueue.global(qos: .userInitiated).async {
