@@ -15,6 +15,7 @@ struct PhotoWrapper: Codable {
 struct Photo: Codable {
     let id: Int
     let largeImageURL: String
+    let userImageURL: String
 }
 
 struct FavoritePhoto: Codable {

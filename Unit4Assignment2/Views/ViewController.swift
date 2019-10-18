@@ -25,7 +25,6 @@ class ViewController: UIViewController {
     var cityName = String() {
         didSet {
             cityLabel.text = "Weather Forecast for \(cityName.capitalized)"
-            
         }
     }
     
@@ -34,14 +33,12 @@ class ViewController: UIViewController {
         setUp()
        loadDefaults()
     }
-    
+  
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
          if let cell = sender as? WeatherCollectionViewCell, let indexPath = self.weatherCollectionOutlet.indexPath(for: cell) {
             let detailVC = segue.destination as! DetailViewController
             detailVC.cityName = cityName
             detailVC.weatherInfo = weatherData[indexPath.row]
-            
         }
     }
    
@@ -49,7 +46,7 @@ class ViewController: UIViewController {
 // MARK: - Private Methods
     
     private func setUp() {
-        let layout = weatherCollectionOutlet.collectionViewLayout as! UICollectionViewFlowLayout
+    let layout = weatherCollectionOutlet.collectionViewLayout as! UICollectionViewFlowLayout
               layout.scrollDirection = .horizontal
         zipCodeTextFieldOutlet.keyboardType = .numberPad
         zipCodeTextFieldOutlet.delegate = self
@@ -136,4 +133,4 @@ extension ViewController : UITextFieldDelegate {
     }
 }
 
-//insert at in the persistence helper for the favorites order
+

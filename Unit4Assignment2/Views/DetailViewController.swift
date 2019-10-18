@@ -11,8 +11,14 @@ import UIKit
 class DetailViewController: UIViewController {
 
     var weatherInfo: Weather!
+    
     var randomPhoto = String() {
         didSet {
+            if randomPhoto == "noImage" {
+                self.cityImageOutlet.image = UIImage(named: randomPhoto)
+                self.favoriteButtonOutlet.isHidden = true
+                self.favoriteButtonOutlet.isEnabled = false
+            } else {
             ImageHelper.shared.getImage(urlStr: randomPhoto) { (result) in
                 DispatchQueue.main.async {
                     switch result {
@@ -22,11 +28,13 @@ class DetailViewController: UIViewController {
                         self.cityImageOutlet.image = image
                         self.activitySpinner.stopAnimating()
                         self.activitySpinner.isHidden = true
+                        
                     }
                 }
             }
         }
     }
+}
     
     var cityName = String() {
         didSet {
@@ -36,13 +44,21 @@ class DetailViewController: UIViewController {
                     case .failure(let error):
                         print(error)
                     case .success(let photoData):
-                        self.randomPhoto = photoData.randomElement()!.largeImageURL
+                        
+                        if photoData.count == 0 {
+                            self.randomPhoto = "noImage"
+                        } else if let photo = photoData.randomElement()?.largeImageURL {
+                            self.randomPhoto = photo
+                        } else {
+                            self.randomPhoto = "noImage"
+                        }
                     }
                 }
             }
         }
     }
-
+// MARK: - Outlets
+    
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var cityImageOutlet: UIImageView!
     @IBOutlet weak var dateLabel: UILabel!
@@ -54,12 +70,19 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var windSpeedLabel: UILabel!
     @IBOutlet weak var precipitationLabel: UILabel!
     @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
+    @IBOutlet weak var favoriteButtonOutlet: UIButton!
     
     @IBAction func favoriteButtonPressed(_ sender: UIButton) {
         let favoritedPhoto = FavoritePhoto(date: Date(), cityName: cityName, imageURL: randomPhoto)
         DispatchQueue.global(qos: .utility).async {
             try? PhotoPersistenceHelper.manager.save(newPhoto: favoritedPhoto)
         }
+        let alert = UIAlertController.init(title: "Favorited!", message: "Photo has been successfully added to favorites.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: {
+            (alertAction: UIAlertAction!) in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        present(alert, animated: true)
     }
     
     
@@ -83,3 +106,6 @@ class DetailViewController: UIViewController {
     }
 
 }
+
+
+

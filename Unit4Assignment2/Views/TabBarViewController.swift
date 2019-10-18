@@ -9,10 +9,6 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
-
-
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +17,8 @@ class TabBarViewController: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         setUp()
-      
     }
+    
     
     private func setUp() {
         self.delegate = self as? UITabBarControllerDelegate
@@ -32,9 +28,8 @@ class TabBarViewController: UITabBarController {
               tabOneVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "cloud.bolt.fill"), tag: 0)
               tabTwoVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "heart.fill"), tag: 1)
               let viewControllerList = [tabOneVC,tabTwoVC]
-              self.viewControllers = viewControllerList.map { UINavigationController(rootViewController: $0) }
+        self.viewControllers = viewControllerList.map { UINavigationController(rootViewController: $0)}
     }
-
 
 }
 
