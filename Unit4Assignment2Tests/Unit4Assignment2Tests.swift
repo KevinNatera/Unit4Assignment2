@@ -31,4 +31,18 @@ class Unit4Assignment2Tests: XCTestCase {
         }
     }
 
+    
+    
+    func testIfWeatherJSONExists() {
+           var data = Data()
+           guard let pathToData = Bundle.main.path(forResource: "pixbay", ofType: "json") else { fatalError("Couldn't find json file") }
+           let url = URL(fileURLWithPath: pathToData)
+           do {
+               data = try Data(contentsOf: url)
+               XCTAssertTrue(data != nil)
+           } catch {
+               XCTFail(error.localizedDescription)
+       
+           }
+       }
 }
